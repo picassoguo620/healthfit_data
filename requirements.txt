@@ -1,3 +1,4 @@
 fitparse
 pandas
 matplotlib
+tabulate
