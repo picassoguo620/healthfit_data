@@ -19,7 +19,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install fitparse pandas matplotlib
+          pip install fitparse pandas matplotlib tabulate
 
       - name: Run analysis
         run: python analyze_fit.py
