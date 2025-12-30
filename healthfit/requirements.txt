@@ -1,3 +1,0 @@
-fitparse
-pandas
-matplotlib
