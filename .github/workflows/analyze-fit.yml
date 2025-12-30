@@ -28,6 +28,6 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add analysis_report.md analysis_plots.png || echo "No new files"
-          git commit -m "Auto analysis: latest HealthFit run" || echo "No changes to commit"
-          git push || echo "No changes to push"
+          git add analysis_report.md analysis_plots.png
+          git commit -m "Update latest run analysis: $(date +'%Y-%m-%d %H:%M')" || echo "No changes to commit"
+          git push origin main || echo "Push failed or no changes"
