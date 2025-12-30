@@ -3,8 +3,8 @@ name: Analyze HealthFit File
 on:
   push:
     paths:
-      - 'healthfit/**'          # 只当 healthfit 文件夹变化时触发
-  workflow_dispatch:            # 支持手动触发
+      - 'healthfit/**'
+  workflow_dispatch:
 
 jobs:
   analyze:
@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}  # 确保有 push 权限
+          fetch-depth: 0  # 确保完整历史
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -26,10 +26,10 @@ jobs:
       - name: Run analysis
         run: python analyze_fit.py
 
-      - name: Commit and push results (force update)
+      - name: Force commit and push results
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add analysis_report.md analysis_plots.png -f  # 强制 add，即使相同
-          git commit -m "Auto update run analysis: $(date +'%Y-%m-%d %H:%M')" || echo "Nothing to commit"
-          git push origin main --force || echo "Push failed (maybe no changes)"
+          git add analysis_report.md analysis_plots.png --force
+          git commit -m "Force update latest run analysis: $(date +'%Y-%m-%d %H:%M:%S')" --allow-empty
+          git push origin main --force-with-lease
