@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # 确保完整历史
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -26,10 +24,11 @@ jobs:
       - name: Run analysis
         run: python analyze_fit.py
 
-      - name: Force commit and push results
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add analysis_report.md analysis_plots.png --force
-          git commit -m "Force update latest run analysis: $(date +'%Y-%m-%d %H:%M:%S')" --allow-empty
-          git push origin main --force-with-lease
+      - name: Commit and push analysis results
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Auto update run analysis: latest HealthFit data"
+          file_pattern: analysis_report.md analysis_plots.png
+          commit_user_name: github-actions[bot]
+          commit_user_email: actions@github.com
+          commit_author: github-actions[bot] <actions@github.com>
