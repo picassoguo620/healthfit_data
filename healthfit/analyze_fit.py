@@ -5,7 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # 找到仓库中最新的 .fit 文件（或指定文件名）
-fit_files = glob.glob('*.fit')  # 如果有后缀
+fit_files = glob.glob('outdoor*') 
 # 如果没后缀，改成 glob.glob('run_*') 或具体名
 if not fit_files:
     print("No .fit file found!")
