@@ -1,0 +1,33 @@
+name: Analyze HealthFit File
+
+on:
+  push:
+    paths:
+      - 'healthfit/**'          # 监控 healthfit 文件夹下任何文件变化
+  workflow_dispatch:            # 支持手动触发
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install fitparse pandas matplotlib
+
+      - name: Run analysis
+        run: python analyze_fit.py
+
+      - name: Commit results
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis_report.md analysis_plots.png || echo "No new files"
+          git commit -m "Auto analysis: latest HealthFit run" || echo "No changes to commit"
+          git push || echo "No changes to push"
