@@ -1,1 +1,33 @@
+name: Analyze FIT File
 
+on:
+  push:  # 每次 push 新文件时触发
+    paths:
+      - '*.fit'  # 只当 .fit 文件变化时触发（或改成你的文件名模式）
+  workflow_dispatch:  # 手动触发
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run analysis
+        run: python analyze_fit.py
+
+      - name: Commit results
+        run: |
+          git config user.name 'github-actions'
+          git config user.email 'actions@github.com'
+          git add analysis_report.md analysis_plots.png
+          git commit -m "Auto analysis for latest FIT" || echo "No changes"
+          git push
